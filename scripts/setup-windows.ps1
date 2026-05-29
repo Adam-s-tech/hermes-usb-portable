@@ -133,7 +133,27 @@ function Extract-Zip($Archive, $Destination) {
     }
     New-Item -ItemType Directory -Force -Path $Destination | Out-Null
     try {
-        Expand-Archive -Path $Archive -DestinationPath $Destination -Force
+        $extracted = $false
+        $winTar = "C:\Windows\System32\tar.exe"
+        if (Test-Path $winTar) {
+            & $winTar -xf "$Archive" -C "$Destination"
+            if ($LASTEXITCODE -eq 0) {
+                $extracted = $true
+            }
+        } elseif (Get-Command tar.exe -ErrorAction SilentlyContinue) {
+            & tar.exe -xf "$Archive" -C "$Destination"
+            if ($LASTEXITCODE -eq 0) {
+                $extracted = $true
+            }
+        }
+
+        if (-not $extracted) {
+            Expand-Archive -Path $Archive -DestinationPath $Destination -Force
+        }
+
+        if (-not (Get-ChildItem $Destination -Force | Select-Object -First 1)) {
+            throw "archive extracted with no files"
+        }
     } catch {
         Remove-Item $Destination -Recurse -Force -ErrorAction SilentlyContinue
         throw "zip extraction failed for " + $label + ": " + $_
@@ -232,6 +252,9 @@ Download-File $SourceUrl $srcArchive
 $srcTemp = Join-Path $TempDir "source"
 Extract-Zip $srcArchive $srcTemp
 $srcSub = Get-ChildItem $srcTemp -Directory | Select-Object -First 1
+if (-not $srcSub) {
+    throw "Hermes source archive did not contain a source folder"
+}
 $destSrc = Join-Path $SrcDir "hermes-agent"
 if (Test-Path $destSrc) { Remove-Item $destSrc -Recurse -Force }
 Move-Item $srcSub.FullName $destSrc -Force
