@@ -19,7 +19,8 @@ $CacheDir   = Join-Path $Root ".cache"
 $RuntimeDir = Join-Path $CacheDir "runtimes\windows-x64"
 $SrcDir     = Join-Path $Root "src"
 $BinDir     = Join-Path $RuntimeDir "bin"
-$TempDir    = Join-Path $RuntimeDir "_temp"
+$TempDir    = Join-Path $Root ".tmp"
+
 
 New-Item -ItemType Directory -Force -Path $RuntimeDir, $SrcDir, $BinDir, $TempDir | Out-Null
 
