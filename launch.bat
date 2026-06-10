@@ -61,10 +61,12 @@ REM ---------------------------------------------------------------------------
 REM Update pyvenv.cfg with the current absolute path to ensure portability
 REM ---------------------------------------------------------------------------
 if exist "%VIRTUAL_ENV%\pyvenv.cfg" (
+    for /f "tokens=2" %%v in ('"%RUNTIME_DIR%\python\python.exe" --version 2^>nul') do set "PYTHON_VERSION=%%v"
+    if not defined PYTHON_VERSION set "PYTHON_VERSION=3.11.15"
     (
     echo home = %RUNTIME_DIR%\python
     echo include-system-site-packages = false
-    echo version = 3.11.10
+    echo version = !PYTHON_VERSION!
     ) > "%VIRTUAL_ENV%\pyvenv.cfg"
 )
 

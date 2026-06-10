@@ -124,6 +124,32 @@ Alternatively, you can select option **`[2]` (Setup / Reconfigure)** in the Laun
 
 ---
 
+## 🧠 Using a Local Ollama Instance
+
+Hermes Portable can use an Ollama server that is already running on the same computer. Start Ollama first, then pull a model:
+
+```bash
+ollama pull qwen3.6
+```
+
+Launch Hermes Portable and choose **`[2]` Setup / Reconfigure Hermes**. In the Hermes setup wizard:
+
+1. Choose **Quick setup**.
+2. Select **More providers**.
+3. Select **Custom endpoint (enter URL manually)**.
+4. Enter the local OpenAI-compatible Ollama endpoint:
+
+```text
+http://127.0.0.1:11434/v1
+```
+
+5. Leave the API key blank when prompted.
+6. Select the detected Ollama model and leave context length blank to auto-detect it.
+
+For a remote Ollama host, use the same `/v1` endpoint format, for example `http://192.168.1.20:11434/v1`. Make sure the Ollama host is reachable from the computer running Hermes Portable.
+
+---
+
 ## 🖥️ Supported Platforms
 
 | Operating System | CPU Architecture | Setup Status | Notes |
