@@ -14,6 +14,10 @@ if [ -z "$PORTABLE_ROOT" ]; then
   exit 1
 fi
 
+# Clean up macOS metadata junk files (._*) from exFAT drives to prevent pip/uv errors
+find "$PORTABLE_ROOT" -name "._*" -depth -exec rm -f {} \; 2>/dev/null || true
+
+
 CACHE_DIR="$PORTABLE_ROOT/.cache"
 SRC_DIR="$PORTABLE_ROOT/src"
 

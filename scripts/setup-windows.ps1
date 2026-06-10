@@ -24,6 +24,9 @@ $TempDir    = Join-Path $Root ".tmp"
 
 New-Item -ItemType Directory -Force -Path $RuntimeDir, $SrcDir, $BinDir, $TempDir | Out-Null
 
+# Clean up macOS metadata junk files (._*) from exFAT drives to prevent pip/uv errors
+Get-ChildItem -Path $Root -Filter "._*" -Recurse -Force -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
+
 # ---------------------------------------------------------------------------
 # Download URLs (pinned for reliability)
 # ---------------------------------------------------------------------------
